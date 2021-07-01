@@ -23,8 +23,8 @@ public class HotelController {
 	}
 
 	@DeleteMapping("delete/{hotelId}")
-	public void deleteHotel(@PathVariable UUID hotelId) {
-		hotelService.delete(hotelId);
+	public void deleteHotel(@AuthenticationPrincipal User user, @PathVariable UUID hotelId) {
+		hotelService.delete(user, hotelId);
 	}
 
 	@PutMapping("create")

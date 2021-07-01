@@ -19,9 +19,13 @@ public class HotelService {
 		this.hotelRepository = hotelRepository;
 	}
 
-	public void delete(UUID hotelId) {
-		// 4. todo: only the owner of the hotel or admin may delete the hotel
-		boolean wasDeleted = hotelRepository.delete(hotelId);
+	public void delete(User user, UUID hotelId) {
+		var wasDeleted = false;
+
+		if (doesUserHavePermission(user, hotelId)) {
+			wasDeleted = hotelRepository.delete(hotelId);
+		}
+
 		if (!wasDeleted) {
 			throw new NoSuchElementException();
 		}
@@ -35,7 +39,7 @@ public class HotelService {
 	public Hotel update(User user, Hotel hotel) {
 		getById(hotel.getId());
 
-		if (doesUserHavePermission(user, hotel)) {
+		if (doesUserHavePermission(user, hotel.getId())) {
 			return hotelRepository.save(hotel);
 		}
 
@@ -50,8 +54,8 @@ public class HotelService {
 		return hotelRepository.getById(hotelId).orElseThrow();
 	}
 
-	private boolean doesUserHavePermission(User user, Hotel hotel) {
+	private boolean doesUserHavePermission(User user, UUID hotelId) {
 		return user.getAuthorities().contains(UserRole.ADMIN) ||
-				hotel.getOwnerId().equals(user.getId());
+				hotelId.equals(user.getId());
 	}
 }
