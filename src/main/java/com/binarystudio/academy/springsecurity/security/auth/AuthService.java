@@ -1,8 +1,10 @@
 package com.binarystudio.academy.springsecurity.security.auth;
 
 import com.binarystudio.academy.springsecurity.domain.user.UserService;
+import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import com.binarystudio.academy.springsecurity.security.auth.model.AuthResponse;
 import com.binarystudio.academy.springsecurity.security.auth.model.AuthorizationRequest;
+import com.binarystudio.academy.springsecurity.security.auth.model.RegistrationRequest;
 import com.binarystudio.academy.springsecurity.security.jwt.JwtProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,4 +36,12 @@ public class AuthService {
 		return !passwordEncoder.matches(rawPw, encodedPw);
 	}
 
+	public AuthResponse performRegistration(RegistrationRequest registrationRequest) {
+		User userDetails = userService.createUser(
+				registrationRequest.getLogin(),
+				registrationRequest.getEmail(),
+				passwordEncoder.encode(registrationRequest.getPassword()));
+
+		return AuthResponse.of(jwtProvider.generateToken(userDetails));
+	}
 }
