@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -28,5 +30,9 @@ public class UserService implements UserDetailsService {
 
 	public User createUser(String login, String email, String password) {
 		return userRepository.createUser(login, email, password);
+	}
+
+	public User updatePassword(User user, String newPassword) {
+		return userRepository.updatePassword(user, newPassword).orElseThrow(() -> new NoSuchElementException("Not found"));
 	}
 }
