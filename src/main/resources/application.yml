@@ -11,4 +11,22 @@ jwt:
 oauth2:
   redirect-uris: http://localhost:3000
 
-# 3. todo: Add OAuth2 configuration with preferred provider, make sure OAuth2 is working
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client_id: ${GOOGLE_CLIENT_ID}
+            client_secret: ${GOOGLE_CLIENT_SECRET}
+            redirect_uri: "{baseUrl}/auth/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+          github:
+            client_id: ${GITHUB_CLIENT_ID}
+            client_secret: ${GITHUB_CLIENT_SECRET}
+            redirect_uri: "{baseUrl}/auth/oauth2/code/{registrationId}"
+            scope:
+              - user:email
+              - read:user
