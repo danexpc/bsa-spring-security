@@ -2,11 +2,13 @@ package com.binarystudio.academy.springsecurity.domain.user;
 
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import com.binarystudio.academy.springsecurity.domain.user.model.UserRole;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Log4j2
 @Repository
 public class UserRepository {
 	private final List<User> users = new ArrayList<>();
@@ -47,5 +49,17 @@ public class UserRepository {
 		createdUser.setUsername(email);
 		createdUser.setAuthorities(Set.of(UserRole.USER));
 		users.add(createdUser);
+	}
+
+	public User createUser(String login, String email, String password) {
+		var createdUser = new User();
+		createdUser.setId(UUID.randomUUID());
+		createdUser.setEmail(email);
+		createdUser.setUsername(login);
+		createdUser.setPassword(password);
+		createdUser.setAuthorities(Set.of(UserRole.USER));
+		users.add(createdUser);
+
+		return createdUser;
 	}
 }
