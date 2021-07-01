@@ -1,7 +1,11 @@
 package com.binarystudio.academy.springsecurity.domain.hotel;
 
 import com.binarystudio.academy.springsecurity.domain.hotel.model.Hotel;
+import com.binarystudio.academy.springsecurity.domain.user.model.User;
+import com.binarystudio.academy.springsecurity.domain.user.model.UserRole;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,10 +32,14 @@ public class HotelService {
 	}
 
 
-	public Hotel update(Hotel hotel) {
-		// 4. todo: only the owner of the hotel or admin may update the hotel
+	public Hotel update(User user, Hotel hotel) {
 		getById(hotel.getId());
-		return hotelRepository.save(hotel);
+
+		if (doesUserHavePermission(user, hotel)) {
+			return hotelRepository.save(hotel);
+		}
+
+		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Have no rights to update hotel");
 	}
 
 	public Hotel create(Hotel hotel) {
@@ -40,5 +48,10 @@ public class HotelService {
 
 	public Hotel getById(UUID hotelId) {
 		return hotelRepository.getById(hotelId).orElseThrow();
+	}
+
+	private boolean doesUserHavePermission(User user, Hotel hotel) {
+		return user.getAuthorities().contains(UserRole.ADMIN) ||
+				hotel.getOwnerId().equals(user.getId());
 	}
 }
