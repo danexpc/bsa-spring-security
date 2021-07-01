@@ -14,7 +14,7 @@ public class UserRepository {
 	public UserRepository(PasswordEncoder passwordEncoder) {
 		var regularUser = new User();
 		regularUser.setUsername("regular");
-		regularUser.setEmail("regular@mail.com");
+		regularUser.setEmail("sherman2017meizu@gmail.com");
 		regularUser.setId(UUID.randomUUID());
 		regularUser.setPassword(passwordEncoder.encode("password"));
 		regularUser.setAuthorities(Set.of(UserRole.USER));
