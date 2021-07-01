@@ -42,9 +42,8 @@ public class AuthController {
 	}
 
 	@PatchMapping("change_password")
-	public AuthResponse changePassword(@RequestBody PasswordChangeRequest passwordChangeRequest) {
-		// 5. todo: implement password changing
-		return null;
+	public AuthResponse changePassword(@AuthenticationPrincipal User user, @RequestBody PasswordChangeRequest passwordChangeRequest) {
+		return authService.performChangingPassword(user, passwordChangeRequest);
 	}
 
 	@GetMapping("me")

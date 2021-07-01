@@ -4,6 +4,7 @@ import com.binarystudio.academy.springsecurity.domain.user.UserService;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import com.binarystudio.academy.springsecurity.security.auth.model.AuthResponse;
 import com.binarystudio.academy.springsecurity.security.auth.model.AuthorizationRequest;
+import com.binarystudio.academy.springsecurity.security.auth.model.PasswordChangeRequest;
 import com.binarystudio.academy.springsecurity.security.auth.model.RegistrationRequest;
 import com.binarystudio.academy.springsecurity.security.jwt.JwtProvider;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,19 @@ public class AuthService {
 				registrationRequest.getLogin(),
 				registrationRequest.getEmail(),
 				passwordEncoder.encode(registrationRequest.getPassword()));
+
+		return AuthResponse.of(jwtProvider.generateToken(userDetails));
+	}
+
+	public AuthResponse performChangingPassword(User user, PasswordChangeRequest passwordChangeRequest) {
+		if (user == null ) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User unauthorized");
+		}
+
+		var userDetails = userService.updatePassword(
+				user,
+				passwordEncoder.encode(passwordChangeRequest.getNewPassword())
+		);
 
 		return AuthResponse.of(jwtProvider.generateToken(userDetails));
 	}
