@@ -29,10 +29,7 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
         }
 
-        return AuthResponse.of(
-                jwtProvider.generateAccessToken(userDetails),
-                jwtProvider.generateRefreshToken(userDetails)
-        );
+        return createAuthResponse(userDetails);
     }
 
     private boolean passwordsDontMatch(String rawPw, String encodedPw) {
@@ -40,15 +37,12 @@ public class AuthService {
     }
 
     public AuthResponse performRegistration(RegistrationRequest registrationRequest) {
-        User userDetails = userService.createUser(
+        var userDetails = userService.createUser(
                 registrationRequest.getLogin(),
                 registrationRequest.getEmail(),
                 passwordEncoder.encode(registrationRequest.getPassword()));
 
-        return AuthResponse.of(
-                jwtProvider.generateAccessToken(userDetails),
-                jwtProvider.generateRefreshToken(userDetails)
-        );
+        return createAuthResponse(userDetails);
     }
 
     public AuthResponse performChangingPassword(User user, PasswordChangeRequest passwordChangeRequest) {
@@ -61,10 +55,7 @@ public class AuthService {
                 passwordEncoder.encode(passwordChangeRequest.getNewPassword())
         );
 
-        return AuthResponse.of(
-                jwtProvider.generateAccessToken(userDetails),
-                jwtProvider.generateRefreshToken(userDetails)
-        );
+        return createAuthResponse(userDetails);
     }
 
     public void performEmailConfirmation(String email) {
@@ -77,6 +68,19 @@ public class AuthService {
         var login = jwtProvider.getLoginFromToken(refreshTokenRequest.getRefreshToken());
         var userDetails = userService.loadUserByUsername(login);
 
+        return createAuthResponse(userDetails);
+    }
+
+    public AuthResponse performPasswordReplacement(ForgottenPasswordReplacementRequest forgottenPasswordReplacementRequest) {
+        var login = jwtProvider.getLoginFromToken(forgottenPasswordReplacementRequest.getToken());
+        var userDetails = userService.loadUserByUsername(login);
+
+        var newUserDetails = userService.updatePassword(userDetails, forgottenPasswordReplacementRequest.getNewPassword());
+
+        return createAuthResponse(newUserDetails);
+    }
+
+    private AuthResponse createAuthResponse(User userDetails) {
         return AuthResponse.of(
                 jwtProvider.generateAccessToken(userDetails),
                 jwtProvider.generateRefreshToken(userDetails)
