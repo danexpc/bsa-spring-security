@@ -27,8 +27,18 @@ public class RestExceptionHandler extends AbstractExceptionHandler {
 	}
 
 	@ExceptionHandler(UsernameNotFoundException.class)
-	public ApiError handleUsernameNotFount(UsernameNotFoundException exception, HttpServletRequest request, HttpServletResponse response) {
+	public ApiError handleUsernameNotFound(UsernameNotFoundException exception, HttpServletRequest request, HttpServletResponse response) {
 		return setResponseStatusAndReturnError(exception, "username-not-found", HttpStatus.NOT_FOUND, request, response);
+	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ApiError handleUserNotFound(UsernameNotFoundException exception, HttpServletRequest request, HttpServletResponse response) {
+		return setResponseStatusAndReturnError(exception, "user-not-found", HttpStatus.NOT_FOUND, request, response);
+	}
+
+	@ExceptionHandler(EmailNotFoundException.class)
+	public ApiError handleEmailNotFound(UsernameNotFoundException exception, HttpServletRequest request, HttpServletResponse response) {
+		return setResponseStatusAndReturnError(exception, "email-not-found", HttpStatus.NOT_FOUND, request, response);
 	}
 
 	@ExceptionHandler(JwtException.class)
