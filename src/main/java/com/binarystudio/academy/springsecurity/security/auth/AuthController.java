@@ -3,8 +3,10 @@ package com.binarystudio.academy.springsecurity.security.auth;
 import com.binarystudio.academy.springsecurity.domain.user.dto.UserDto;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import com.binarystudio.academy.springsecurity.security.auth.model.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("auth")
@@ -47,6 +49,10 @@ public class AuthController {
 
     @GetMapping("me")
     public UserDto whoAmI(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
         return UserDto.fromEntity(user);
     }
 }
