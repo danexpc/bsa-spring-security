@@ -75,7 +75,9 @@ public class AuthService {
         var login = jwtProvider.getLoginFromToken(forgottenPasswordReplacementRequest.getToken());
         var userDetails = userService.loadUserByUsername(login);
 
-        var newUserDetails = userService.updatePassword(userDetails, forgottenPasswordReplacementRequest.getNewPassword());
+        var newUserDetails = userService.updatePassword(userDetails,
+                passwordEncoder.encode(forgottenPasswordReplacementRequest.getNewPassword())
+        );
 
         return createAuthResponse(newUserDetails);
     }
