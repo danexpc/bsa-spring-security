@@ -1,5 +1,6 @@
 package com.binarystudio.academy.springsecurity.security.auth;
 
+import com.binarystudio.academy.springsecurity.domain.user.dto.UserDto;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import com.binarystudio.academy.springsecurity.security.auth.model.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,7 +46,7 @@ public class AuthController {
     }
 
     @GetMapping("me")
-    public User whoAmI(@AuthenticationPrincipal User user) {
-        return user;
+    public UserDto whoAmI(@AuthenticationPrincipal User user) {
+        return UserDto.fromEntity(user);
     }
 }

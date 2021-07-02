@@ -24,7 +24,7 @@ public class UserController {
 	}
 
 	@GetMapping("me")
-	public UserDto whoAmI(@AuthenticationPrincipal UserDto userDto) {
-		return userDto;
+	public UserDto whoAmI(@AuthenticationPrincipal User user) {
+		return UserDto.fromEntity(user);
 	}
 }
