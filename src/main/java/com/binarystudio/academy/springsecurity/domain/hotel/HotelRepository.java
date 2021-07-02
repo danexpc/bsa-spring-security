@@ -31,7 +31,7 @@ public class HotelRepository {
 		return Collections.unmodifiableList(hotels);
 	}
 
-	public Hotel save(Hotel hotel) {
+	public Optional<Hotel> update(Hotel hotel) {
 		var foundHotel = getById(hotel.getId());
 		if (foundHotel.isPresent()) {
 			var savedHotel = foundHotel.get();
@@ -39,12 +39,13 @@ public class HotelRepository {
 			savedHotel.setName(hotel.getName());
 			savedHotel.setImageUrl(hotel.getImageUrl());
 			savedHotel.setOwnerId(hotel.getOwnerId());
-			return savedHotel;
-		} else {
-			var clonedHotel = hotel.cloneWithNewId();
-			hotels.add(clonedHotel);
-			return clonedHotel;
+			return Optional.of(savedHotel);
 		}
+		return Optional.empty();
+	}
+
+	public void save(Hotel hotel) {
+		hotels.add(hotel);
 	}
 
 	public boolean delete(UUID hotelId) {
