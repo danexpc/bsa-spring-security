@@ -2,7 +2,6 @@ package com.binarystudio.academy.springsecurity.domain.hotel;
 
 import com.binarystudio.academy.springsecurity.domain.hotel.dto.CreateHotelDto;
 import com.binarystudio.academy.springsecurity.domain.hotel.dto.HotelDto;
-import com.binarystudio.academy.springsecurity.domain.hotel.model.Hotel;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

@@ -6,7 +6,6 @@ import com.binarystudio.academy.springsecurity.domain.hotel.model.Hotel;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import com.binarystudio.academy.springsecurity.domain.user.model.UserRole;
 import com.binarystudio.academy.springsecurity.exceptions.HotelNotFoundException;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,7 +15,6 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Log4j2
 @Service
 public class HotelService {
     private final HotelRepository hotelRepository;
@@ -54,8 +52,6 @@ public class HotelService {
                 .getById(hotelDto.getId())
                 .orElseThrow(() -> new HotelNotFoundException("Hotel not found"));
 
-        log.error(user);
-        log.error(hotel);
         if (doesUserHavePermission(user, hotel.getOwnerId())) {
             return HotelDto.fromEntity(hotelRepository.update(
                     Hotel.of(
