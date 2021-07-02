@@ -2,10 +2,7 @@ package com.binarystudio.academy.springsecurity.security.auth;
 
 import com.binarystudio.academy.springsecurity.domain.user.UserService;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
-import com.binarystudio.academy.springsecurity.security.auth.model.AuthResponse;
-import com.binarystudio.academy.springsecurity.security.auth.model.AuthorizationRequest;
-import com.binarystudio.academy.springsecurity.security.auth.model.PasswordChangeRequest;
-import com.binarystudio.academy.springsecurity.security.auth.model.RegistrationRequest;
+import com.binarystudio.academy.springsecurity.security.auth.model.*;
 import com.binarystudio.academy.springsecurity.security.jwt.JwtProvider;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -31,7 +28,7 @@ public class AuthService {
         if (passwordsDontMatch(authorizationRequest.getPassword(), userDetails.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
         }
-        // 2. todo: auth and refresh token are given to user
+
         return AuthResponse.of(
                 jwtProvider.generateAccessToken(userDetails),
                 jwtProvider.generateRefreshToken(userDetails)
@@ -74,5 +71,15 @@ public class AuthService {
         var userDetails = userService.getByEmail(email);
 
         log.info(jwtProvider.generateAccessToken(userDetails));
+    }
+
+    public AuthResponse performRefreshTokenPair(RefreshTokenRequest refreshTokenRequest) {
+        var login = jwtProvider.getLoginFromToken(refreshTokenRequest.getRefreshToken());
+        var userDetails = userService.loadUserByUsername(login);
+
+        return AuthResponse.of(
+                jwtProvider.generateAccessToken(userDetails),
+                jwtProvider.generateRefreshToken(userDetails)
+        );
     }
 }
