@@ -1,5 +1,6 @@
 package com.binarystudio.academy.springsecurity.domain.user;
 
+import com.binarystudio.academy.springsecurity.domain.user.dto.UserDto;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +19,12 @@ public class UserController {
 	}
 
 	@GetMapping("all")
-	public List<User> listAllUsers() {
+	public List<UserDto> listAllUsers() {
 		return userService.getAll();
 	}
 
 	@GetMapping("me")
-	public User whoAmI(@AuthenticationPrincipal User user) {
-		return user;
+	public UserDto whoAmI(@AuthenticationPrincipal UserDto userDto) {
+		return userDto;
 	}
 }

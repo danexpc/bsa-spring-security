@@ -1,5 +1,6 @@
 package com.binarystudio.academy.springsecurity.domain.user;
 
+import com.binarystudio.academy.springsecurity.domain.user.dto.UserDto;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -24,8 +25,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Not found"));
     }
 
-    public List<User> getAll() {
-        return userRepository.findUsers();
+    public List<UserDto> getAll() {
+        return userRepository
+                .findUsers()
+                .stream()
+                .map(UserDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public User createUser(String login, String email, String password) {
