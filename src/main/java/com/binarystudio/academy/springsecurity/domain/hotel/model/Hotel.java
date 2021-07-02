@@ -40,8 +40,4 @@ public class Hotel {
 		hotel.setImageUrl(imageUrl);
 		return hotel;
 	}
-
-	public Hotel cloneWithNewId() {
-		return of(name, description, imageUrl);
-	}
 }
