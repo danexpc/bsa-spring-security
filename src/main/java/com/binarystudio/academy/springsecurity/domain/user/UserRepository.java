@@ -75,4 +75,8 @@ public class UserRepository {
 
         return Optional.empty();
     }
+
+    public Optional<User> getByEmail(String email) {
+        return users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
+    }
 }

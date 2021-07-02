@@ -8,31 +8,35 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
-	private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-	@Autowired
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-	@Override
-	public User loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Not found"));
-	}
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Not found"));
+    }
 
-	public List<User> getAll() {
-		return userRepository.findUsers();
-	}
+    public List<User> getAll() {
+        return userRepository.findUsers();
+    }
 
-	public User createUser(String login, String email, String password) {
-		return userRepository.createUser(login, email, password);
-	}
+    public User createUser(String login, String email, String password) {
+        return userRepository.createUser(login, email, password);
+    }
 
-	public User updatePassword(User user, String newPassword) {
-		return userRepository.updatePassword(user, newPassword).orElseThrow(() -> new NoSuchElementException("Not found"));
-	}
+    public User updatePassword(User user, String newPassword) {
+        return userRepository.updatePassword(user, newPassword).orElseThrow(() -> new NoSuchElementException("Not found"));
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.getByEmail(email).orElseThrow(() -> new NoSuchElementException("Not found"));
+    }
 }
