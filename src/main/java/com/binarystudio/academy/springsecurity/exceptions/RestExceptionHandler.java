@@ -41,6 +41,11 @@ public class RestExceptionHandler extends AbstractExceptionHandler {
 		return setResponseStatusAndReturnError(exception, "email-not-found", HttpStatus.NOT_FOUND, request, response);
 	}
 
+	@ExceptionHandler(HotelNotFoundException.class)
+	public ApiError handleHotelNotFound(UsernameNotFoundException exception, HttpServletRequest request, HttpServletResponse response) {
+		return setResponseStatusAndReturnError(exception, "hotel-not-found", HttpStatus.NOT_FOUND, request, response);
+	}
+
 	@ExceptionHandler(JwtException.class)
 	public ApiError handleJwtException(JwtException exception, HttpServletRequest request, HttpServletResponse response) {
 		return setResponseStatusAndReturnError(exception, exception.getCode(), HttpStatus.UNAUTHORIZED, request, response);
