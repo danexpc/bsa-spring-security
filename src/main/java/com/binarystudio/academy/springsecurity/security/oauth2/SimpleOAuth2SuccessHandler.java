@@ -19,43 +19,45 @@ import java.util.Optional;
 import static com.binarystudio.academy.springsecurity.security.oauth2.RedirectUriToCookiePersister.REDIRECT_URI_PARAM;
 
 public class SimpleOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-	@Autowired
-	private JwtProvider jwtProvider;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private OAuth2Properties oAuth2Properties;
+    @Autowired
+    private JwtProvider jwtProvider;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private OAuth2Properties oAuth2Properties;
 
-	@Override
-	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-		var redirUrl = extractRedirectUri(request).orElseGet(() -> super.determineTargetUrl(request, response, authentication));
-		if (redirUrlIsUnknown(redirUrl)) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Redirect uri is unknown");
-		}
-		var oauthUser = (OAuth2User) authentication.getPrincipal();
-		var storedUser = userRepository.findByEmail(oauthUser.getAttribute("email")).orElseThrow();
-		// 2. todo: don't forget that OAuth2 users also need refresh tokens
-		var token = jwtProvider.generateAccessToken(storedUser);
-		return UriComponentsBuilder.fromUriString(redirUrl)
-				.queryParam("token", token).build().toUriString();
-	}
+    @Override
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        var redirUrl = extractRedirectUri(request).orElseGet(() -> super.determineTargetUrl(request, response, authentication));
+        if (redirUrlIsUnknown(redirUrl)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Redirect uri is unknown");
+        }
+        var oauthUser = (OAuth2User) authentication.getPrincipal();
+        var storedUser = userRepository.findByEmail(oauthUser.getAttribute("email")).orElseThrow();
 
-	private Optional<String> extractRedirectUri(HttpServletRequest request) {
-		for (Cookie cookie : request.getCookies()) {
-			if (REDIRECT_URI_PARAM.equals(cookie.getName())) {
-				return Optional.of(cookie.getValue());
-			}
-		}
-		return Optional.empty();
-	}
+        var accessToken = jwtProvider.generateAccessToken(storedUser);
+        var refreshToken = jwtProvider.generateRefreshToken(storedUser);
+        return UriComponentsBuilder.fromUriString(redirUrl)
+                .queryParam("accessToken", accessToken)
+                .queryParam("refreshToken", refreshToken).build().toUriString();
+    }
 
-	private boolean redirUrlIsUnknown(String url) {
-		final var clientRedirectUri = URI.create(url);
-		return oAuth2Properties.getRedirectUris().stream()
-				.noneMatch(authorizedRedirectUri -> {
-					URI authorizedURI = URI.create(authorizedRedirectUri);
-					return authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-							&& authorizedURI.getPort() == clientRedirectUri.getPort();
-				});
-	}
+    private Optional<String> extractRedirectUri(HttpServletRequest request) {
+        for (Cookie cookie : request.getCookies()) {
+            if (REDIRECT_URI_PARAM.equals(cookie.getName())) {
+                return Optional.of(cookie.getValue());
+            }
+        }
+        return Optional.empty();
+    }
+
+    private boolean redirUrlIsUnknown(String url) {
+        final var clientRedirectUri = URI.create(url);
+        return oAuth2Properties.getRedirectUris().stream()
+                .noneMatch(authorizedRedirectUri -> {
+                    URI authorizedURI = URI.create(authorizedRedirectUri);
+                    return authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+                            && authorizedURI.getPort() == clientRedirectUri.getPort();
+                });
+    }
 }
