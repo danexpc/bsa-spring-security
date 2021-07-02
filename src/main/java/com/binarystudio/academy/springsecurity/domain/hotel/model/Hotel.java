@@ -12,8 +12,18 @@ public class Hotel {
 	private String imageUrl;
 	private UUID ownerId;
 
+	public static Hotel of(String name, String description, String imageUrl, UUID ownerUuid) {
+		var hotel = new Hotel();
+		hotel.setId(UUID.randomUUID());
+		hotel.setName(name);
+		hotel.setDescription(description);
+		hotel.setImageUrl(imageUrl);
+		hotel.setOwnerId(ownerUuid);
+		return hotel;
+	}
+
 	public static Hotel of(String name, String description, String imageUrl) {
-		Hotel hotel = new Hotel();
+		var hotel = new Hotel();
 		hotel.setId(UUID.randomUUID());
 		hotel.setName(name);
 		hotel.setDescription(description);
