@@ -2,13 +2,14 @@ package com.binarystudio.academy.springsecurity.domain.user;
 
 import com.binarystudio.academy.springsecurity.domain.user.dto.UserDto;
 import com.binarystudio.academy.springsecurity.domain.user.model.User;
+import com.binarystudio.academy.springsecurity.exceptions.EmailNotFoundException;
+import com.binarystudio.academy.springsecurity.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +23,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Not found"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
     public List<UserDto> getAll() {
@@ -38,10 +39,10 @@ public class UserService implements UserDetailsService {
     }
 
     public User updatePassword(User user, String newPassword) {
-        return userRepository.updatePassword(user, newPassword).orElseThrow(() -> new NoSuchElementException("Not found"));
+        return userRepository.updatePassword(user, newPassword).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     public User getByEmail(String email) {
-        return userRepository.getByEmail(email).orElseThrow(() -> new NoSuchElementException("Not found"));
+        return userRepository.getByEmail(email).orElseThrow(() -> new EmailNotFoundException("Email not found"));
     }
 }
