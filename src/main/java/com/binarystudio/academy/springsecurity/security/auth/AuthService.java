@@ -7,11 +7,13 @@ import com.binarystudio.academy.springsecurity.security.auth.model.Authorization
 import com.binarystudio.academy.springsecurity.security.auth.model.PasswordChangeRequest;
 import com.binarystudio.academy.springsecurity.security.auth.model.RegistrationRequest;
 import com.binarystudio.academy.springsecurity.security.jwt.JwtProvider;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+@Log4j2
 @Service
 public class AuthService {
 	private final UserService userService;
@@ -57,5 +59,11 @@ public class AuthService {
 		);
 
 		return AuthResponse.of(jwtProvider.generateToken(userDetails));
+	}
+
+	public void performEmailConfirmation(String email) {
+		var userDetails = userService.getByEmail(email);
+
+		log.info(jwtProvider.generateToken(userDetails));
 	}
 }

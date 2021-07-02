@@ -32,7 +32,7 @@ public class AuthController {
 
 	@PutMapping("safe/forgotten_password")
 	public void forgotPasswordRequest(@RequestParam String email) {
-		// 6. todo: implement token display for further password update
+		authService.performEmailConfirmation(email);
 	}
 
 	@PatchMapping("safe/forgotten_password")
