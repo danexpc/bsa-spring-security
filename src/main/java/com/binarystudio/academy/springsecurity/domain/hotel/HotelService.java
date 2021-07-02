@@ -53,14 +53,22 @@ public class HotelService {
         var hotel = hotelRepository.getById(hotelDto.getId()).orElseThrow();
 
         if (doesUserHavePermission(user, hotel.getOwnerId())) {
-            return HotelDto.fromEntity(hotelRepository.save(hotel));
+            return HotelDto.fromEntity(hotelRepository.save(
+                    Hotel.of(
+                            hotel.getId(),
+                            hotelDto.getName(),
+                            hotelDto.getDescription(),
+                            hotelDto.getImageUrl(),
+                            hotel.getOwnerId()
+                    )
+            ));
         }
 
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Have no rights to update hotel");
     }
 
     public HotelDto create(User user, CreateHotelDto hotelDto) {
-        Hotel savedHotel = hotelRepository.save(Hotel.of(
+        var savedHotel = hotelRepository.save(Hotel.of(
                 hotelDto.getName(),
                 hotelDto.getDescription(),
                 hotelDto.getImageUrl(),
