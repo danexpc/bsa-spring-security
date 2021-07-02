@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AuthResponse {
 	private String accessToken;
-	// 2 todo: add refresh token
+	private String refreshToken;
 
 	public static AuthResponse of(String token) {
 		AuthResponse response = new AuthResponse();
