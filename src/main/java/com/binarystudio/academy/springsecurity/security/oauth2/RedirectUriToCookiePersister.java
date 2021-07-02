@@ -24,7 +24,7 @@ public class RedirectUriToCookiePersister implements AuthorizationRequestReposit
 		// so that further we can pass him the JWT back
 		var redirectUri = request.getParameter(REDIRECT_URI_PARAM);
 		if (StringUtils.hasText(redirectUri)) {
-			Cookie redirCookie = new Cookie(REDIRECT_URI_PARAM, redirectUri);
+			var redirCookie = new Cookie(REDIRECT_URI_PARAM, redirectUri);
 			redirCookie.setPath("/");
 			redirCookie.setHttpOnly(true);
 			// we can extract cookie's max age to application.yml

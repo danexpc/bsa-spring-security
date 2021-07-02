@@ -49,7 +49,7 @@ public class JwtProvider {
 	}
 
 	private String generateAccessToken(User user, Long timeInSecs) {
-		Date date = Date.from(LocalDateTime.now().plusSeconds(timeInSecs).toInstant(ZoneOffset.UTC));
+		var date = Date.from(LocalDateTime.now().plusSeconds(timeInSecs).toInstant(ZoneOffset.UTC));
 		return Jwts.builder()
 				.setSubject(user.getUsername())
 				.setExpiration(date)
@@ -58,7 +58,7 @@ public class JwtProvider {
 	}
 
 	public String getLoginFromToken(String token) {
-		Claims claims = parseToken(token);
+		var claims = parseToken(token);
 		return claims.getSubject();
 	}
 

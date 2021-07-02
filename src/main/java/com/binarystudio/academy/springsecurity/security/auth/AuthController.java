@@ -8,44 +8,44 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("auth")
 public class AuthController {
-	private final AuthService authService;
+    private final AuthService authService;
 
-	public AuthController(AuthService authService) {
-		this.authService = authService;
-	}
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
-	@PostMapping("safe/login")
-	public AuthResponse login(@RequestBody AuthorizationRequest authorizationRequest) {
-		return authService.performLogin(authorizationRequest);
-	}
+    @PostMapping("safe/login")
+    public AuthResponse login(@RequestBody AuthorizationRequest authorizationRequest) {
+        return authService.performLogin(authorizationRequest);
+    }
 
-	@PostMapping("safe/register")
-	public AuthResponse register(@RequestBody RegistrationRequest registrationRequest) {
-		return authService.performRegistration(registrationRequest);
-	}
+    @PostMapping("safe/register")
+    public AuthResponse register(@RequestBody RegistrationRequest registrationRequest) {
+        return authService.performRegistration(registrationRequest);
+    }
 
-	@PostMapping("safe/refresh")
-	public AuthResponse refreshTokenPair(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-		return authService.performRefreshTokenPair(refreshTokenRequest);
-	}
+    @PostMapping("safe/refresh")
+    public AuthResponse refreshTokenPair(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return authService.performRefreshTokenPair(refreshTokenRequest);
+    }
 
-	@PutMapping("safe/forgotten_password")
-	public void forgotPasswordRequest(@RequestParam String email) {
-		authService.performEmailConfirmation(email);
-	}
+    @PutMapping("safe/forgotten_password")
+    public void forgotPasswordRequest(@RequestParam String email) {
+        authService.performEmailConfirmation(email);
+    }
 
-	@PatchMapping("safe/forgotten_password")
-	public AuthResponse forgottenPasswordReplacement(@RequestBody ForgottenPasswordReplacementRequest forgottenPasswordReplacementRequest) {
-		return authService.performPasswordReplacement(forgottenPasswordReplacementRequest);
-	}
+    @PatchMapping("safe/forgotten_password")
+    public AuthResponse forgottenPasswordReplacement(@RequestBody ForgottenPasswordReplacementRequest forgottenPasswordReplacementRequest) {
+        return authService.performPasswordReplacement(forgottenPasswordReplacementRequest);
+    }
 
-	@PatchMapping("change_password")
-	public AuthResponse changePassword(@AuthenticationPrincipal User user, @RequestBody PasswordChangeRequest passwordChangeRequest) {
-		return authService.performChangingPassword(user, passwordChangeRequest);
-	}
+    @PatchMapping("change_password")
+    public AuthResponse changePassword(@AuthenticationPrincipal User user, @RequestBody PasswordChangeRequest passwordChangeRequest) {
+        return authService.performChangingPassword(user, passwordChangeRequest);
+    }
 
-	@GetMapping("me")
-	public User whoAmI(@AuthenticationPrincipal User user) {
-		return user;
-	}
+    @GetMapping("me")
+    public User whoAmI(@AuthenticationPrincipal User user) {
+        return user;
+    }
 }

@@ -55,7 +55,7 @@ public class SimpleOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         final var clientRedirectUri = URI.create(url);
         return oAuth2Properties.getRedirectUris().stream()
                 .noneMatch(authorizedRedirectUri -> {
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
+                    var authorizedURI = URI.create(authorizedRedirectUri);
                     return authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
                             && authorizedURI.getPort() == clientRedirectUri.getPort();
                 });
