@@ -39,10 +39,17 @@ public class JwtProvider {
 		return jwtParser;
 	}
 
-	// 2. todo: refresh token should be generated here
+	public String generateRefreshToken(User user) {
+		return generateAccessToken(user, jwtProperties.getSecs_to_expire_refresh());
+	}
 
-	public String generateToken(User user) {
-		Date date = Date.from(LocalDateTime.now().plusSeconds(jwtProperties.getSecs_to_expire_access()).toInstant(ZoneOffset.UTC));
+
+	public String generateAccessToken(User user) {
+		return generateAccessToken(user, jwtProperties.getSecs_to_expire_access());
+	}
+
+	private String generateAccessToken(User user, Long timeInSecs) {
+		Date date = Date.from(LocalDateTime.now().plusSeconds(timeInSecs).toInstant(ZoneOffset.UTC));
 		return Jwts.builder()
 				.setSubject(user.getUsername())
 				.setExpiration(date)

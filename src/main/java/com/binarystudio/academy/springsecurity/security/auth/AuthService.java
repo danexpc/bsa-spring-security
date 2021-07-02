@@ -32,7 +32,7 @@ public class AuthService {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
 		}
 		// 2. todo: auth and refresh token are given to user
-		return AuthResponse.of(jwtProvider.generateToken(userDetails));
+		return AuthResponse.of(jwtProvider.generateAccessToken(userDetails));
 	}
 
 	private boolean passwordsDontMatch(String rawPw, String encodedPw) {
@@ -45,7 +45,7 @@ public class AuthService {
 				registrationRequest.getEmail(),
 				passwordEncoder.encode(registrationRequest.getPassword()));
 
-		return AuthResponse.of(jwtProvider.generateToken(userDetails));
+		return AuthResponse.of(jwtProvider.generateAccessToken(userDetails));
 	}
 
 	public AuthResponse performChangingPassword(User user, PasswordChangeRequest passwordChangeRequest) {
@@ -58,12 +58,12 @@ public class AuthService {
 				passwordEncoder.encode(passwordChangeRequest.getNewPassword())
 		);
 
-		return AuthResponse.of(jwtProvider.generateToken(userDetails));
+		return AuthResponse.of(jwtProvider.generateAccessToken(userDetails));
 	}
 
 	public void performEmailConfirmation(String email) {
 		var userDetails = userService.getByEmail(email);
 
-		log.info(jwtProvider.generateToken(userDetails));
+		log.info(jwtProvider.generateAccessToken(userDetails));
 	}
 }
