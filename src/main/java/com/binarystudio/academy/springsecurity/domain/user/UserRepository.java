@@ -14,11 +14,19 @@ public class UserRepository {
     public UserRepository(PasswordEncoder passwordEncoder) {
         var regularUser = new User();
         regularUser.setUsername("regular");
-        regularUser.setEmail("sherman2017meizu@gmail.com");
-        regularUser.setId(UUID.randomUUID());
+        regularUser.setEmail("regular@mail.com");
+        regularUser.setId(UUID.fromString("ac7dec79-68bc-4fcb-a611-b1672726ca97"));
         regularUser.setPassword(passwordEncoder.encode("password"));
         regularUser.setAuthorities(Set.of(UserRole.USER));
         this.users.add(regularUser);
+
+        var regular2User = new User();
+        regular2User.setUsername("regular2");
+        regular2User.setEmail("regular2@mail.com");
+        regular2User.setId(UUID.randomUUID());
+        regular2User.setPassword(passwordEncoder.encode("password2"));
+        regular2User.setAuthorities(Set.of(UserRole.USER));
+        this.users.add(regular2User);
 
         var adminUser = new User();
         adminUser.setUsername("privileged");
