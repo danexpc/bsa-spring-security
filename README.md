@@ -1,34 +1,19 @@
-# Overview
+# BSA-Spring-Security
 
-В этом задании нужно будет доработать Spring Boot приложение реализовав нужный функционал. Шаблон приложения скачайте по
-ссылке на [Github](https://github.com/Quipex/bsa_spring_security_tutorial/tree/homework). Для общения с приложением рекомендую
-воспользоваться [Postman](https://www.postman.com)'ом чтобы не тратить время на написание фронтенда.
+Spring Boot Application Development, implementing the required functionality.
 
-## Задание
+## What is done: 
 
-1. Реализуйте функционал регистрации. Пользователь должен иметь возможность зарегистрироваться, отправив соответствующий
-   запрос на backend, либо при помощи OAuth2 если его аккаунт не был создан.
-2. Реализуйте функционал refresh-токена: при авторизации пользователя давайте ему 2 ключа с разным временем жизни.
-   Первый - 30 минут (access_token), второй - 30 дней - refresh_token. Создайте эндпоинт, принимающий refresh_token в
-   теле запроса и возвращающий новую пару access и refresh токенов.
-3. Создайте тестовые приложения OAuth2 для [Google](https://console.developers.google.com/), [Facebook](https://developers.facebook.com) или [Github](https://github.com/settings/developers) на выбор. Впишите их clientId и secret в настройки приложения. Убедитесь что они работают. **Никогда не комитьте clientId и secret в репозиторий**, оставьте вместо них плейсхолдеры наподобие {PROVIDER_NAME_CLIENT_ID}. Пришлите clientId и secret настроенного приложения в сообщении к домашке. Не используйте нигде больше эти id и secret, когда понадобится еще раз создать авторизацию OAuth2. Лучше создайте новое приложение или перегенерируйте secret.
-4. Сделайте так, чтобы только владелец отеля или администратор мог изменять описание отеля, а так же удалять его.
-5. Реализуйте возможность сменить пароль.
-6. Реализуйте сброс пароля по типу "Забыл пароль". Флоу должен быть следующим:
-    1. Отправляется запрос с почтой пользователя на эндпоинт. Для простоты, отправлять на почту ничего не нужно: в
-       консоль выводится токен, который позже будет использован для сброса пароля.
-    2. Запрос с новым паролем и токеном отправляется на сервер, если всё ок - пароль меняется.
-7. Подключите Spring Boot Actuator и дайте к нему доступ только администраторам.
-
-## Критерии оценки
-
-1. Реализован ли функционал.
-2. Насколько корректно распределена логика по слоям приложения (контроллер, сервис, репозиторий).
-3. Правильность именования методов/переменных/классов. Чистота кода. Принцип DRY.
-
-## Важно
-
-Вы можете добавлять в сигнатуры эндпоинтов свои аргументы, но не убирайте те, что там уже присутствуют. Так же не
-меняйте методы (GET, POST, PATCH, etc.) и пути эндпоинтов. Для того чтобы не потеряться в проекте, вы можете
-навигироваться при помощи todo, оставленных в коде
-
+1. The registration functionality has been implemented. The user has the opportunity to register by sending the appropriate
+   a request to the backend, or using OAuth2 if its account has not been created.
+2. The functionality of a refresh token has been implemented: when a user is authorized, he is given 2 keys with different lifetimes.
+   The first is 30 minutes (access_token), the second is 30 days - refresh_token. Created endpoint accepting refresh_token in
+   body of the request and returning a new pair of access and refresh tokens.
+3.Created OAuth2 test apps for [Google](https://console.developers.google.com/) and [Github](https://github.com/settings/developers).
+4. Made so that only the owner of the hotel or the administrator can change the description of the hotel, as well as delete it.
+5. The ability to change the password has been implemented.
+6. Password reset of the "Forgot password" type has been implemented. The flow is as follows:
+    1. A request is sent with the user's mail to the endpoint. For simplicity, you do not need to send anything by mail: in
+       the console displays a token that will later be used to reset the password.
+    2. A request with a new password and token is sent to the server, if everything is ok, the password changes.
+7. Spring Boot Actuator is connected and only administrators have access to it.
